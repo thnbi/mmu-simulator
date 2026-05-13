@@ -1,8 +1,71 @@
+import { AnimatePresence, motion } from 'motion/react';
+import type { TranslationStep } from '../domain/types';
+import { useSimulatorStore } from '../store/simulator';
+
 export function MMUPanel() {
+  const traducao = useSimulatorStore((s) => s.traducaoAtual);
+
   return (
     <section className="card preset-outlined-surface-500 p-4">
-      <h2 className="h4 mb-2">MMU</h2>
-      <p className="text-sm text-surface-700-300">em construção</p>
+      <h2 className="h4 mb-3">MMU</h2>
+      {!traducao ? (
+        <p className="text-sm text-surface-700-300">
+          Clique em uma variável de um processo para ver a tradução passo a passo.
+        </p>
+      ) : (
+        <ol className="flex flex-col gap-2">
+          <AnimatePresence mode="popLayout">
+            {traducao.steps.map((step, i) => (
+              <motion.li
+                key={`${traducao.logical}-${step.kind}`}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ delay: i * 0.25, duration: 0.25 }}
+                className="rounded-base bg-surface-100-900 p-3 text-sm"
+              >
+                <strong className="mr-2 text-primary-700-300">{i + 1}.</strong>
+                {descreverPasso(step)}
+              </motion.li>
+            ))}
+          </AnimatePresence>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: traducao.steps.length * 0.25 + 0.1 }}
+            className="mt-2 rounded-base bg-primary-100-900 p-3 text-sm font-semibold text-primary-700-300"
+          >
+            Endereço físico = 0x
+            {traducao.physical.toString(16).padStart(4, '0').toUpperCase()} ({traducao.physical})
+          </motion.div>
+        </ol>
+      )}
     </section>
   );
+}
+
+function descreverPasso(step: TranslationStep): string {
+  switch (step.kind) {
+    case 'decompose':
+      return `Decompõe endereço lógico 0x${step.logical
+        .toString(16)
+        .padStart(4, '0')
+        .toUpperCase()} → página ${step.page}, deslocamento 0x${step.offset
+        .toString(16)
+        .padStart(3, '0')
+        .toUpperCase()}`;
+    case 'read-ptbr':
+      return `Lê PTBR de ${step.processId}: offset 0x${step.ptbrOffset
+        .toString(16)
+        .padStart(4, '0')
+        .toUpperCase()} dentro do frame 0`;
+    case 'lookup-entry':
+      return `Consulta entrada da tabela: página ${step.page} → quadro ${step.frame}`;
+    case 'compute-physical':
+      return `Calcula endereço físico = ${step.frame} × 1024 + 0x${step.offset
+        .toString(16)
+        .padStart(3, '0')
+        .toUpperCase()} = 0x${step.physical.toString(16).padStart(4, '0').toUpperCase()}`;
+  }
 }
