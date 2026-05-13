@@ -1,6 +1,7 @@
 import { ArcherElement } from 'react-archer';
 import type { LogicalAddress, ProcessId } from '../domain/types';
 import { coresDoProcesso } from '../lib/colors';
+import { useIsDesktop } from '../lib/useIsDesktop';
 import { useSimulatorStore } from '../store/simulator';
 
 type Props = {
@@ -14,19 +15,21 @@ export function VariableButton({ processoId, varIndex, logical, ativo }: Props) 
   const acessar = useSimulatorStore((s) => s.acessarVariavel);
   const traducao = useSimulatorStore((s) => s.traducaoAtual);
   const cores = coresDoProcesso(processoId);
+  const isDesktop = useIsDesktop();
 
   const isCurrentSource = ativo && traducao?.logical === logical;
-  const relations = isCurrentSource
-    ? [
-        {
-          targetId: 'step-decompose',
-          targetAnchor: 'left' as const,
-          sourceAnchor: 'right' as const,
-          style: { strokeColor: cores.stroke, strokeWidth: 2 },
-          label: <span className="text-xs">acessa</span>,
-        },
-      ]
-    : [];
+  const relations =
+    isCurrentSource && isDesktop
+      ? [
+          {
+            targetId: 'step-decompose',
+            targetAnchor: 'left' as const,
+            sourceAnchor: 'right' as const,
+            style: { strokeColor: cores.stroke, strokeWidth: 2 },
+            label: <span className="text-xs">acessa</span>,
+          },
+        ]
+      : [];
 
   return (
     <ArcherElement id={`var-${processoId}-${varIndex}`} relations={relations}>

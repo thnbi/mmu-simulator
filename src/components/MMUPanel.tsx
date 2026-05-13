@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { ArcherElement } from 'react-archer';
 import type { Translation, TranslationStep } from '../domain/types';
 import { coresDoProcesso } from '../lib/colors';
+import { useIsDesktop } from '../lib/useIsDesktop';
 import { useSimulatorStore } from '../store/simulator';
 
 function relationsForStep(step: TranslationStep, traducao: Translation, stroke: string) {
@@ -34,6 +35,7 @@ export function MMUPanel() {
   const traducao = useSimulatorStore((s) => s.traducaoAtual);
   const ativo = useSimulatorStore((s) => s.processoAtivo);
   const cores = coresDoProcesso(ativo);
+  const isDesktop = useIsDesktop();
 
   return (
     <section className="card preset-outlined-surface-500 p-4">
@@ -46,7 +48,7 @@ export function MMUPanel() {
         <ol className="flex flex-col gap-2">
           {traducao.steps.map((step, i) => {
             const stepId = `step-${step.kind}`;
-            const relations = relationsForStep(step, traducao, cores.stroke);
+            const relations = isDesktop ? relationsForStep(step, traducao, cores.stroke) : [];
             return (
               <ArcherElement key={stepId} id={stepId} relations={relations}>
                 <li>
