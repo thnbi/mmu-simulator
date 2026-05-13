@@ -1,9 +1,39 @@
 import { AnimatePresence, motion } from 'motion/react';
-import type { TranslationStep } from '../domain/types';
+import { ArcherElement } from 'react-archer';
+import type { Translation, TranslationStep } from '../domain/types';
+import { coresDoProcesso } from '../lib/colors';
 import { useSimulatorStore } from '../store/simulator';
+
+function relationsForStep(step: TranslationStep, traducao: Translation, stroke: string) {
+  if (step.kind === 'read-ptbr') {
+    return [
+      {
+        targetId: 'frame-0',
+        targetAnchor: 'left' as const,
+        sourceAnchor: 'right' as const,
+        style: { strokeColor: stroke, strokeWidth: 2, lineStyle: 'curve' as const },
+        label: <span className="text-xs">lê tabela</span>,
+      },
+    ];
+  }
+  if (step.kind === 'compute-physical') {
+    return [
+      {
+        targetId: `frame-${traducao.frame}`,
+        targetAnchor: 'left' as const,
+        sourceAnchor: 'right' as const,
+        style: { strokeColor: stroke, strokeWidth: 3, lineStyle: 'curve' as const },
+        label: <span className="text-xs font-bold">acessa quadro {traducao.frame}</span>,
+      },
+    ];
+  }
+  return [];
+}
 
 export function MMUPanel() {
   const traducao = useSimulatorStore((s) => s.traducaoAtual);
+  const ativo = useSimulatorStore((s) => s.processoAtivo);
+  const cores = coresDoProcesso(ativo);
 
   return (
     <section className="card preset-outlined-surface-500 p-4">
@@ -15,19 +45,25 @@ export function MMUPanel() {
       ) : (
         <ol className="flex flex-col gap-2">
           <AnimatePresence mode="popLayout">
-            {traducao.steps.map((step, i) => (
-              <motion.li
-                key={`${traducao.logical}-${step.kind}`}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ delay: i * 0.25, duration: 0.25 }}
-                className="rounded-base bg-surface-100-900 p-3 text-sm"
-              >
-                <strong className="mr-2 text-primary-700-300">{i + 1}.</strong>
-                {descreverPasso(step)}
-              </motion.li>
-            ))}
+            {traducao.steps.map((step, i) => {
+              const stepId = `step-${step.kind}`;
+              const relations = relationsForStep(step, traducao, cores.stroke);
+              return (
+                <ArcherElement key={stepId} id={stepId} relations={relations}>
+                  <motion.li
+                    key={`${traducao.logical}-${step.kind}`}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ delay: i * 0.25, duration: 0.25 }}
+                    className="rounded-base bg-surface-100-900 p-3 text-sm"
+                  >
+                    <strong className="mr-2 text-primary-700-300">{i + 1}.</strong>
+                    {descreverPasso(step)}
+                  </motion.li>
+                </ArcherElement>
+              );
+            })}
           </AnimatePresence>
 
           <motion.div

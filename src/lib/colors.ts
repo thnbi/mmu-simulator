@@ -6,6 +6,7 @@ type ProcessColor = {
   border: string;
   text: string;
   chip: string;
+  stroke: string; // CSS color for SVG strokes
 };
 
 export const PROCESS_COLORS: Record<ProcessId, ProcessColor> = {
@@ -15,6 +16,7 @@ export const PROCESS_COLORS: Record<ProcessId, ProcessColor> = {
     border: 'border-primary-500',
     text: 'text-primary-700-300',
     chip: 'preset-filled-primary-500',
+    stroke: 'var(--color-primary-500)',
   },
   P2: {
     bg: 'bg-success-500',
@@ -22,6 +24,7 @@ export const PROCESS_COLORS: Record<ProcessId, ProcessColor> = {
     border: 'border-success-500',
     text: 'text-success-700-300',
     chip: 'preset-filled-success-500',
+    stroke: 'var(--color-success-500)',
   },
   P3: {
     bg: 'bg-warning-500',
@@ -29,6 +32,7 @@ export const PROCESS_COLORS: Record<ProcessId, ProcessColor> = {
     border: 'border-warning-500',
     text: 'text-warning-700-300',
     chip: 'preset-filled-warning-500',
+    stroke: 'var(--color-warning-500)',
   },
 };
 
