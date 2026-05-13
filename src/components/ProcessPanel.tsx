@@ -39,22 +39,18 @@ function ProcessoCard({
   const ptbrHex = processo.ptbrOffset.toString(16).padStart(4, '0').toUpperCase();
 
   return (
-    <article
-      className={`rounded-base border border-surface-300-700 p-3 ${ringClass}`}
-      onClick={onSelecionar}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') onSelecionar();
-      }}
-    >
-      <header className="mb-2 flex items-center justify-between">
-        <h3 className={`h6 ${cores.text}`}>{processo.id}</h3>
-        <span className="badge preset-tonal-surface text-xs">PTBR offset 0x{ptbrHex}</span>
-      </header>
+    <article className={`rounded-base border border-surface-300-700 p-3 ${ringClass}`}>
+      <button type="button" onClick={onSelecionar} className="w-full cursor-pointer text-left">
+        <header className="mb-2 flex items-center justify-between">
+          <h3 className={`h6 ${cores.text}`}>{processo.id}</h3>
+          <span className="badge preset-tonal-surface text-xs">PTBR offset 0x{ptbrHex}</span>
+        </header>
 
-      <dl className="mb-2 text-xs text-surface-700-300">
-        <dt className="font-semibold">TCB</dt>
-        <dd>tabela em frame 0, offset 0x{ptbrHex}</dd>
-      </dl>
+        <dl className="mb-2 text-xs text-surface-700-300">
+          <dt className="font-semibold">TCB</dt>
+          <dd>tabela em frame 0, offset 0x{ptbrHex}</dd>
+        </dl>
+      </button>
 
       <div className="flex flex-wrap gap-1.5">
         {processo.variables.map((logical) => (

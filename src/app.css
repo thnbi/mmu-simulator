@@ -3,3 +3,5 @@
 @import "@skeletonlabs/skeleton";
 @import "@skeletonlabs/skeleton-react";
 @import "@skeletonlabs/skeleton/themes/hamlindigo";
+
+@custom-variant dark (&:where(.dark, .dark *));
