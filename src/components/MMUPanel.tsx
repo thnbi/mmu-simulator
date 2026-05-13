@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { ArcherElement } from 'react-archer';
 import type { Translation, TranslationStep } from '../domain/types';
 import { coresDoProcesso } from '../lib/colors';
@@ -44,27 +44,25 @@ export function MMUPanel() {
         </p>
       ) : (
         <ol className="flex flex-col gap-2">
-          <AnimatePresence mode="popLayout">
-            {traducao.steps.map((step, i) => {
-              const stepId = `step-${step.kind}`;
-              const relations = relationsForStep(step, traducao, cores.stroke);
-              return (
-                <ArcherElement key={stepId} id={stepId} relations={relations}>
-                  <motion.li
-                    key={`${traducao.logical}-${step.kind}`}
+          {traducao.steps.map((step, i) => {
+            const stepId = `step-${step.kind}`;
+            const relations = relationsForStep(step, traducao, cores.stroke);
+            return (
+              <ArcherElement key={stepId} id={stepId} relations={relations}>
+                <li>
+                  <motion.div
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0 }}
                     transition={{ delay: i * 0.25, duration: 0.25 }}
                     className="rounded-base bg-surface-100-900 p-3 text-sm"
                   >
                     <strong className="mr-2 text-primary-700-300">{i + 1}.</strong>
                     {descreverPasso(step)}
-                  </motion.li>
-                </ArcherElement>
-              );
-            })}
-          </AnimatePresence>
+                  </motion.div>
+                </li>
+              </ArcherElement>
+            );
+          })}
 
           <motion.div
             initial={{ opacity: 0 }}

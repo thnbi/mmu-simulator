@@ -19,15 +19,17 @@ export function Frame({ index, ownerProcess, highlighted, secondaryHighlight }: 
 
   return (
     <ArcherElement id={`frame-${index}`}>
-      <motion.div
-        className={`rounded-base border border-surface-300-700 p-2 text-center text-xs ${baseColor} ${ringClass}`}
-        animate={highlighted ? { scale: [1, 1.08, 1, 1.08, 1] } : { scale: 1 }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="font-bold">{index}</div>
-        <div className="opacity-80">0x{enderecoInicial}</div>
-        <div className="mt-0.5 opacity-70">{labelForOwner(ownerProcess)}</div>
-      </motion.div>
+      <div>
+        <motion.div
+          className={`rounded-base border border-surface-300-700 p-2 text-center text-xs ${baseColor} ${ringClass}`}
+          animate={highlighted ? { scale: [1, 1.08, 1, 1.08, 1] } : { scale: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="font-bold">{index}</div>
+          <div className="opacity-80">0x{enderecoInicial}</div>
+          <div className="mt-0.5 opacity-70">{labelForOwner(ownerProcess)}</div>
+        </motion.div>
+      </div>
     </ArcherElement>
   );
 }
