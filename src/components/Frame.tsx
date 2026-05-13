@@ -6,15 +6,19 @@ type Props = {
   index: number;
   ownerProcess: ProcessId | 'TABLES' | null;
   highlighted: boolean;
+  secondaryHighlight?: ProcessId;
 };
 
-export function Frame({ index, ownerProcess, highlighted }: Props) {
+export function Frame({ index, ownerProcess, highlighted, secondaryHighlight }: Props) {
   const baseColor = colorForOwner(ownerProcess);
   const enderecoInicial = (index * 1024).toString(16).padStart(4, '0').toUpperCase();
+  const ringClass = secondaryHighlight
+    ? `ring-2 ring-offset-1 ${coresDoProcesso(secondaryHighlight).border}`
+    : '';
 
   return (
     <motion.div
-      className={`rounded-base border border-surface-300-700 p-2 text-center text-xs ${baseColor}`}
+      className={`rounded-base border border-surface-300-700 p-2 text-center text-xs ${baseColor} ${ringClass}`}
       animate={highlighted ? { scale: [1, 1.08, 1, 1.08, 1] } : { scale: 1 }}
       transition={{ duration: 0.6 }}
     >
