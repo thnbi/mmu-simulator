@@ -3,10 +3,10 @@ import { asFrame, asLogical, asPage, type Process } from './types';
 
 function variaveisPorPagina(): ReturnType<typeof asLogical>[] {
   return [
-    asLogical(0 * PAGE_SIZE),
-    asLogical(1 * PAGE_SIZE),
-    asLogical(2 * PAGE_SIZE),
-    asLogical(3 * PAGE_SIZE),
+    asLogical(0 * PAGE_SIZE + 0x010),
+    asLogical(1 * PAGE_SIZE + 0x100),
+    asLogical(2 * PAGE_SIZE + 0x2a0),
+    asLogical(3 * PAGE_SIZE + 0x3f0),
   ];
 }
 
