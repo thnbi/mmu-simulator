@@ -38,6 +38,8 @@ function ProcessoCard({
   const ringClass = ativo ? `ring-2 ring-offset-2 ${cores.border}` : '';
   const ptbrHex = processo.ptbrOffset.toString(16).padStart(4, '0').toUpperCase();
 
+  const mapa = processo.pageTable.map((e) => `pg${e.page}→f${e.frame}`).join('  ');
+
   return (
     <article className={`rounded-base border border-surface-300-700 p-3 ${ringClass}`}>
       <button type="button" onClick={onSelecionar} className="w-full cursor-pointer text-left">
@@ -46,12 +48,19 @@ function ProcessoCard({
           <span className="badge preset-tonal-surface text-xs">PTBR offset 0x{ptbrHex}</span>
         </header>
 
-        <dl className="mb-2 text-xs text-surface-700-300">
+        <dl className="mb-1 text-xs text-surface-700-300">
           <dt className="font-semibold">TCB</dt>
           <dd>tabela em frame 0, offset 0x{ptbrHex}</dd>
         </dl>
+
+        <p className="mb-2 font-mono text-[0.7rem] text-surface-600-400">
+          <span className="font-semibold not-italic">Mapa:</span> {mapa}
+        </p>
       </button>
 
+      <p className="mb-1 text-[0.7rem] font-semibold uppercase tracking-wide text-surface-600-400">
+        Variáveis
+      </p>
       <div className="flex flex-wrap gap-1.5">
         {processo.variables.map((logical) => (
           <VariableButton

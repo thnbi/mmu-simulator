@@ -38,7 +38,10 @@ export function VariableButton({ processoId, varIndex, logical, ativo }: Props) 
           className={`btn btn-sm ${ativo ? cores.chip : 'preset-outlined-surface-500'} disabled:opacity-50`}
           title={`Endereço lógico 0x${logical.toString(16).padStart(4, '0').toUpperCase()}`}
         >
-          var{varIndex} <span className="opacity-70">pg {Math.floor(logical / 1024)}</span>
+          var{varIndex}{' '}
+          <span className="font-mono opacity-70">
+            0x{logical.toString(16).padStart(4, '0').toUpperCase()}
+          </span>
         </button>
       </span>
     </ArcherElement>
