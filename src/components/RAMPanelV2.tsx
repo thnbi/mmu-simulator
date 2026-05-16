@@ -88,12 +88,12 @@ function FrameLinha({ index, ownerId, ownerPage, highlighted }: FrameLinhaProps)
 
   return (
     <motion.div
-      className={`flex items-center justify-between rounded-base border border-surface-300-700 px-2 py-1 text-xs ${bg}`}
+      className={`grid grid-cols-[1fr_auto_1fr] items-center rounded-base border border-surface-300-700 px-2 py-1 text-xs ${bg}`}
       animate={highlighted ? { scale: [1, 1.04, 1, 1.04, 1] } : { scale: 1 }}
       transition={{ duration: 0.6 }}
     >
       <span className="font-mono opacity-80">0x{enderecoInicial}</span>
-      <span className="font-bold">{index}</span>
+      <span className="px-2 text-center font-bold">{index}</span>
       <span className={`${labelColor} text-right`}>{label}</span>
     </motion.div>
   );
